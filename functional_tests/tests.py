@@ -61,7 +61,7 @@ class NewVisitorTest(LiveServerTestCase):
     self.check_for_row_in_list_table('2:gift to girlfriend')
      
      # 他满意的离开了
-def test_multiple_users_can_start_lists_at_different_urls(self):
+  def test_multiple_users_can_start_lists_at_different_urls(self):
     # 张三新建了一个待办事项
     self.browser.get(self.live_server_url)
     inputbox=self.browser.find_element(By.ID,'id_new_item')
