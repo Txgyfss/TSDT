@@ -3,6 +3,8 @@ from selenium.webdriver.common.keys import Keys
 import time
 import unittest
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import WebDriverException
+
 from django.test import LiveServerTestCase
 max_wait=10
 class NewVisitorTest(LiveServerTestCase):
@@ -48,8 +50,7 @@ class NewVisitorTest(LiveServerTestCase):
     # 他按了回车键键后，页面更新了
     # 待办事项表格中显示了“1:Buy flowers"
     inputbox.send_keys(Keys.ENTER)
-    time.sleep(1)
-    self.check_for_row_in_list_table('1:Buy flowers')
+    self.wait_for_row_in_list_table('1:Buy flowers')
     # 页面中又显示了一个文本输入框，可以输入其他待办事项
     # 他输入了“gift to girlfriend"
     inputbox=self.browser.find_element(By.ID,'id_new_item')
@@ -57,8 +58,8 @@ class NewVisitorTest(LiveServerTestCase):
     inputbox.send_keys(Keys.ENTER)
 
     # 页面再次更新，她的清单中显示了这两个待办事项
-    self.check_for_row_in_list_table('1:Buy flowers')
-    self.check_for_row_in_list_table('2:gift to girlfriend')
+    self.wait_for_row_in_list_table('1:Buy flowers')
+    self.wait_for_row_in_list_table('2:gift to girlfriend')
      
      # 他满意的离开了
   def test_multiple_users_can_start_lists_at_different_urls(self):
