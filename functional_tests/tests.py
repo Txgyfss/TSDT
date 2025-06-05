@@ -7,10 +7,14 @@ from selenium.common.exceptions import WebDriverException
 
 from django.test import LiveServerTestCase
 max_wait=10
+import os
 class NewVisitorTest(LiveServerTestCase):
   
   def setUp(self):
     self.browser=webdriver.Chrome()
+    real_server=os.environ.get('REAL_SERVER')
+    if real_server:
+      self.live_server_url='http://'+real_server
     
   def tearDown(self):
     self.browser.quit()
@@ -50,7 +54,7 @@ class NewVisitorTest(LiveServerTestCase):
     # 他按了回车键键后，页面更新了
     # 待办事项表格中显示了“1:Buy flowers"
     inputbox.send_keys(Keys.ENTER)
-    self.wait_for_row_in_list_table('1:Buy flowers')
+    self.wait_for_row_in_list_table('1: Buy flowers')
     # 页面中又显示了一个文本输入框，可以输入其他待办事项
     # 他输入了“gift to girlfriend"
     inputbox=self.browser.find_element(By.ID,'id_new_item')
@@ -103,3 +107,12 @@ class NewVisitorTest(LiveServerTestCase):
    # self.fail('Finish the test!')
     # 他访问那个URL，发现他的待办事项列表还在
     # 他满意的离开了
+  def test_layout_and_styling(self):
+    # 张三访问首页
+    self.browser.get(self.live_server_url)
+    self.browser.set_window_size(1024,768)
+    # 他看到输入框完美的居中显示
+    inputbox=self.browser.find_element(By.ID,'id_new_item')
+    self.assertAlmostEqual(
+      inputbox.location['x']+inputbox.size['width']/2,512,delta=5
+    )
