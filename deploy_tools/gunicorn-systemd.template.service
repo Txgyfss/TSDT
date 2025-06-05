@@ -1,0 +1,12 @@
+[Unit]
+Description=Gunicorn server for 116.62.19.195
+
+[Service]
+Restart=on-failure
+User=hxf
+WorkingDirectory=/home/hxf/sites/116.62.19.195/source
+ExecStart=/home/hxf/sites/116.62.19.195/virtualenv/bin/gunicorn \
+          --bind unix:/tmp/116.62.19.195.socket notes.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
